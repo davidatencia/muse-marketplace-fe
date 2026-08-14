@@ -1,0 +1,36 @@
+.story {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-md);
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: var(--space-lg);
+  align-items: center;
+}
+
+.media {
+  max-width: 420px;
+}
+
+.heading {
+  font-size: clamp(26px, 3.5vw, 36px);
+  margin: 12px 0 16px;
+  color: var(--color-text);
+}
+
+.paragraph {
+  font-size: 16px;
+  color: var(--color-text-muted);
+  margin: 0 0 16px;
+}
+
+@media (max-width: 860px) {
+  .story {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .media {
+    margin: 0 auto;
+  }
+}

@@ -1,0 +1,23 @@
+.placeholder {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm);
+  background: linear-gradient(135deg, var(--color-thistle), var(--color-amethyst));
+  border-radius: 16px;
+  color: var(--color-dark-purple);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+  opacity: 0.75;
+}
+
+.image {
+  width: 100%;
+  display: block;
+  object-fit: contain;
+  border-radius: 16px;
+}

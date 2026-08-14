@@ -1,0 +1,20 @@
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: var(--space-md);
+}
+
+.heading[data-align='center'] {
+  align-items: center;
+  text-align: center;
+}
+
+.title {
+  font-size: clamp(28px, 4vw, 40px);
+  color: var(--color-text);
+}
+
+.title[data-tone='light'] {
+  color: #fff;
+}

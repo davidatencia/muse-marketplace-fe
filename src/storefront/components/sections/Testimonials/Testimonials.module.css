@@ -1,0 +1,45 @@
+.testimonials {
+  padding: var(--space-xl) 0;
+  background: var(--color-surface);
+}
+
+.inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: var(--space-md);
+}
+
+.quote {
+  font-size: 15px;
+  font-style: italic;
+  margin: 0 0 16px;
+  color: var(--color-text);
+}
+
+.author {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--color-accent);
+}
+
+@media (max-width: 860px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
