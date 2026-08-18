@@ -12,7 +12,6 @@ function App() {
   return (
     <LoadingProvider>
       <BrowserRouter>
-        <Loader />
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<MainLayout />}>
