@@ -10,6 +10,7 @@ interface ButtonProps {
   variant?: ButtonVariant;
   type?: 'button' | 'submit';
   onClick?: MouseEventHandler;
+  disabled?: boolean;
 }
 
 function Button({
@@ -18,6 +19,7 @@ function Button({
   variant = 'primary',
   type = 'button',
   onClick,
+  disabled = false,
 }: ButtonProps) {
   const className = `${styles.button} ${styles[variant]}`;
 
@@ -47,7 +49,12 @@ function Button({
   }
 
   return (
-    <button type={type} className={className} onClick={onClick}>
+    <button
+      type={type}
+      className={className}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {children}
     </button>
   );

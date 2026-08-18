@@ -7,6 +7,7 @@ import { productsNavLinks } from '@public/storefront/data/navigation';
 
 const Home = lazy(() => import('@public/storefront/pages/Home/Home'));
 const Products = lazy(() => import('@public/storefront/pages/Products/Products'));
+const Login = lazy(() => import('@public/auth/pages/Login/Login'));
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             >
               <Route path="productos" element={<Products />} />
             </Route>
+            <Route path="/login" element={<Login />} />
           </Routes>
         </Suspense>
       </BrowserRouter>
