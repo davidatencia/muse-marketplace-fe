@@ -1,0 +1,97 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.heading {
+  font-size: 32px;
+}
+
+.description {
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+.status {
+  color: var(--color-text-muted);
+}
+
+.error {
+  color: #b3261e;
+  margin: 0;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.table th {
+  text-align: left;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--color-thistle);
+}
+
+.table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--color-thistle);
+  vertical-align: middle;
+}
+
+.imageCell {
+  width: 64px;
+}
+
+.thumb {
+  width: 48px;
+}
+
+.badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-thistle);
+  color: var(--color-dark-purple);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.actionsCell {
+  display: flex;
+  gap: var(--space-sm);
+  white-space: nowrap;
+}
+
+.editLink {
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.deleteButton {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #b3261e;
+}
