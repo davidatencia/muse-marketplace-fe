@@ -1,0 +1,24 @@
+.gallery {
+  padding: var(--space-xl) 0;
+}
+
+.inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-sm);
+}
+
+@media (max-width: 860px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

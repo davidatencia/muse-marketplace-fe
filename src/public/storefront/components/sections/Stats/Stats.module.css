@@ -1,0 +1,33 @@
+.stats {
+  background: var(--color-olive);
+  color: #fff;
+}
+
+.list {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-md);
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+  color: var(--color-dark-purple);
+}
+
+.value {
+  font-family: var(--font-heading);
+  font-size: 40px;
+}
+
+.label {
+  font-size: 14px;
+  opacity: 0.8;
+}

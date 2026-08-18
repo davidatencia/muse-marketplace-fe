@@ -1,0 +1,20 @@
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.eyebrow[data-tone='light'] {
+  color: var(--color-thistle);
+}
+
+.sparkle {
+  font-size: 10px;
+  line-height: 1;
+  color: var(--color-accent-secondary);
+}
