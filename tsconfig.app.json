@@ -26,8 +26,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@admin/*": ["./src/admin/*"],
-      "@storefront/*": ["./src/storefront/*"],
+      "@private/*": ["./src/private/*"],
+      "@public/*": ["./src/public/*"],
       "@shared/*": ["./src/shared/*"]
     }
   },

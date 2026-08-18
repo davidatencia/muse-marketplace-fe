@@ -2,11 +2,12 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import Loader from '@shared/components/ui/Loader/Loader';
 import LoadingProvider from '@shared/context/LoadingProvider/LoadingProvider';
-import MainLayout from '@storefront/layouts/MainLayout/MainLayout';
-import { productsNavLinks } from './storefront/data/navigation';
+import MainLayout from '@public/storefront/layouts/MainLayout/MainLayout';
+import { productsNavLinks } from '@public/storefront/data/navigation';
 
-const Home = lazy(() => import('@storefront/pages/Home/Home'));
-const Products = lazy(() => import('@storefront/pages/Products/Products'));
+const Home = lazy(() => import('@public/storefront/pages/Home/Home'));
+const Products = lazy(() => import('@public/storefront/pages/Products/Products'));
+const Login = lazy(() => import('@public/auth/pages/Login/Login'));
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             >
               <Route path="productos" element={<Products />} />
             </Route>
+            <Route path="/login" element={<Login />} />
           </Routes>
         </Suspense>
       </BrowserRouter>
