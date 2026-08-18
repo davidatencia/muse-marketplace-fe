@@ -12,8 +12,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      '@admin': fileURLToPath(new URL('./src/admin', import.meta.url)),
-      '@storefront': fileURLToPath(new URL('./src/storefront', import.meta.url)),
+      '@private': fileURLToPath(new URL('./src/private', import.meta.url)),
+      '@public': fileURLToPath(new URL('./src/public', import.meta.url)),
       '@shared': fileURLToPath(new URL('./src/shared', import.meta.url)),
     },
   },
