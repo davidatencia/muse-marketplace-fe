@@ -1,7 +1,8 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import Loader from '@shared/components/ui/Loader/Loader'
 import { LoadingContext } from './LoadingContext'
+import { registerLoadingHandlers } from './loadingBridge'
 import styles from './LoadingProvider.module.css'
 
 interface LoadingProviderProps {
@@ -20,6 +21,11 @@ function LoadingProvider({ children }: LoadingProviderProps) {
   }, [])
 
   const isLoading = pendingCount > 0
+
+  useEffect(() => {
+    registerLoadingHandlers({ start: startLoading, stop: stopLoading })
+    return () => registerLoadingHandlers(null)
+  }, [startLoading, stopLoading])
 
   const value = useMemo(
     () => ({ isLoading, startLoading, stopLoading }),

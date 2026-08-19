@@ -23,7 +23,7 @@ function Overview() {
   return (
     <div className={styles.overview}>
       <h1 className={styles.heading}>Panel de administración</h1>
-      <p className={styles.description}>Elige qué quieres gestionar.</p>
+      <p className={styles.description}>Elige qué quieres gestionar hoy.</p>
       <div className={styles.grid}>
         {sections.map((section) => (
           <Link key={section.to} to={section.to} className={styles.card}>
