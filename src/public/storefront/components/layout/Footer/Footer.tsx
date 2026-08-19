@@ -1,10 +1,10 @@
-import { Link } from 'react-router'
-import type { ContactDetails, NavLink } from '@public/storefront/types/content'
-import styles from './Footer.module.css'
+import { Link } from 'react-router';
+import type { ContactDetails, NavLink } from '@public/storefront/types/content';
+import styles from './Footer.module.css';
 
 interface FooterProps {
-  links: NavLink[]
-  contact: ContactDetails
+  links: NavLink[];
+  contact: ContactDetails;
 }
 
 function Footer({ links, contact }: FooterProps) {
@@ -34,19 +34,21 @@ function Footer({ links, contact }: FooterProps) {
           <p>{contact.address}</p>
         </div>
       </div>
-      <p className={styles.copyright}>© {new Date().getFullYear()} Musé. Todos los derechos reservados.</p>
+      <p className={styles.copyright}>
+        © {new Date().getFullYear()} Musé. Todos los derechos reservados.
+      </p>
       <p className={styles.credit}>
         Desarrollado por{' '}
-        <a href="https://www.linkedin.com/in/david-atencia/" target="_blank" rel="noopener noreferrer">
+        <a
+          href="https://www.linkedin.com/in/david-atencia/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           David Atencia
         </a>{' '}
-        ·{' '}
-        <a href="https://github.com/davidatencia" target="_blank" rel="noopener noreferrer">
-          GitHub
-        </a>
       </p>
     </footer>
-  )
+  );
 }
 
-export default Footer
+export default Footer;
