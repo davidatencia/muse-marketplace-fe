@@ -67,9 +67,7 @@ function Products() {
 
         {error && <p className={styles.error}>{error}</p>}
 
-        {isLoading ? (
-          <p className={styles.status}>Cargando...</p>
-        ) : (
+        {isLoading ? null : (
           <>
             <ul className={styles.filters}>
               <li>

@@ -8,6 +8,7 @@ import { getErrorMessage } from '@shared/utils/getErrorMessage';
 import logo from '@shared/assets/logos/logo-mark.png';
 import styles from './Login.module.css';
 import GradientBackground from '@/shared/components/ui/GradientBackground/GradientBackground';
+import { setUserInformation } from '@/shared/api/userInformationStorage';
 
 function Login() {
   const navigate = useNavigate();
@@ -22,8 +23,12 @@ function Login() {
     setIsSubmitting(true);
 
     try {
-      const { authData } = await login({ email, password });
-      setTokens(authData.access_token, authData.refresh_token);
+      const {
+        authData: { access_token, refresh_token },
+        userData,
+      } = await login({ email, password });
+      setTokens(access_token, refresh_token);
+      setUserInformation(userData);
       navigate('/dashboard');
     } catch (err) {
       setError(getErrorMessage(err, 'No se pudo conectar con el servidor'));
