@@ -8,6 +8,18 @@
   padding: 0 var(--space-md);
 }
 
+.status {
+  text-align: center;
+  color: var(--color-text-muted);
+  margin: var(--space-md) 0;
+}
+
+.error {
+  text-align: center;
+  color: #b3261e;
+  margin: var(--space-md) 0;
+}
+
 .filters {
   list-style: none;
   margin: var(--space-md) 0;

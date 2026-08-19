@@ -2,11 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import AccessoryForm from '@private/dashboard/components/AccessoryForm/AccessoryForm';
 import type { AccessoryFormValues } from '@private/dashboard/components/AccessoryForm/AccessoryForm';
-import {
-  createAccessory,
-  getAccessory,
-  updateAccessory,
-} from '@private/dashboard/api/accessoriesApi';
+import { createAccessory, updateAccessory } from '@private/dashboard/api/accessoriesApi';
+import { getAccessory } from '@shared/api/accessoriesApi';
 import { getCategories } from '@private/dashboard/api/categoriesApi';
 import { getMaterials } from '@private/dashboard/api/materialsApi';
 import { getErrorMessage } from '@shared/utils/getErrorMessage';

@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import Button from '@shared/components/ui/Button/Button';
 import ImagePlaceholder from '@shared/components/ui/ImagePlaceholder/ImagePlaceholder';
-import { deleteAccessory, getAccessories } from '@private/dashboard/api/accessoriesApi';
+import { deleteAccessory } from '@private/dashboard/api/accessoriesApi';
+import { getAccessories } from '@shared/api/accessoriesApi';
 import { getErrorMessage } from '@shared/utils/getErrorMessage';
-import type { Accessory } from '@private/dashboard/types/accessory';
+import type { Accessory } from '@shared/types/accessory';
 import styles from './Accessories.module.css';
 
 function Accessories() {
