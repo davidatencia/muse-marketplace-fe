@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import type { SubmitEvent } from 'react';
 import { useNavigate } from 'react-router';
-import { isAxiosError } from 'axios';
 import Button from '@shared/components/ui/Button/Button';
 import { setTokens } from '@shared/api/tokenStorage';
 import { login } from '@public/auth/api/authApi';
+import { getErrorMessage } from '@shared/utils/getErrorMessage';
 import logo from '@shared/assets/logos/logo-mark.png';
 import styles from './Login.module.css';
 import GradientBackground from '@/shared/components/ui/GradientBackground/GradientBackground';
@@ -24,13 +24,9 @@ function Login() {
     try {
       const { authData } = await login({ email, password });
       setTokens(authData.access_token, authData.refresh_token);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
-      if (isAxiosError<{ message: string }>(err) && err.response) {
-        setError(err.response.data.message);
-      } else {
-        setError('No se pudo conectar con el servidor');
-      }
+      setError(getErrorMessage(err, 'No se pudo conectar con el servidor'));
     } finally {
       setIsSubmitting(false);
     }

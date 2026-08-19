@@ -1,0 +1,19 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-width: 640px;
+}
+
+.heading {
+  font-size: 32px;
+}
+
+.status {
+  color: var(--color-text-muted);
+}
+
+.error {
+  color: #b3261e;
+  margin: 0;
+}
