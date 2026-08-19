@@ -4,7 +4,10 @@ import Button from '@shared/components/ui/Button/Button';
 import { clearTokens } from '@shared/api/tokenStorage';
 import logo from '@shared/assets/logos/logo-mark.png';
 import styles from './DashboardLayout.module.css';
-import { getUserName } from '@/shared/api/userInformationStorage';
+import {
+  clearUserInformation,
+  getUserName,
+} from '@/shared/api/userInformationStorage';
 
 const navItems = [
   { to: '/dashboard/categorias', label: 'Categorías' },
@@ -27,6 +30,7 @@ function DashboardLayout() {
   function handleLogout() {
     closeMenu();
     clearTokens();
+    clearUserInformation();
     navigate('/login');
   }
 

@@ -11,6 +11,7 @@ const baseOptions: Cookies.CookieAttributes = {
 export function setUserInformation(userData: AuthUser) {
   Cookies.set(USER_INFORMATION, JSON.stringify(userData), {
     ...baseOptions,
+    expires: 7,
   });
 }
 
@@ -23,6 +24,6 @@ export function getUserName(): string | undefined {
   return getUserInformation()?.name;
 }
 
-export function clearTokens() {
+export function clearUserInformation() {
   Cookies.remove(USER_INFORMATION);
 }
