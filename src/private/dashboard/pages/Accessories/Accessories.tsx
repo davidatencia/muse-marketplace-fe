@@ -60,9 +60,7 @@ function Accessories() {
 
       {error && <p className={styles.error}>{error}</p>}
 
-      {isLoading ? (
-        <p className={styles.status}>Cargando...</p>
-      ) : accessories.length === 0 ? (
+      {isLoading ? null : accessories.length === 0 ? (
         <p className={styles.status}>Todavía no hay accesorios registrados.</p>
       ) : (
         <div className={styles.tableWrapper}>

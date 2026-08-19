@@ -101,7 +101,7 @@ function AccessoryFormPage() {
   }
 
   if (isLoading) {
-    return <p className={styles.status}>Cargando...</p>;
+    return null;
   }
 
   return (

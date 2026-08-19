@@ -154,9 +154,7 @@ function NameResourceManager({
 
       {error && <p className={styles.error}>{error}</p>}
 
-      {isLoading ? (
-        <p className={styles.status}>Cargando...</p>
-      ) : items.length === 0 ? (
+      {isLoading ? null : items.length === 0 ? (
         <p className={styles.status}>Todavía no hay registros.</p>
       ) : (
         <ul className={styles.list}>
