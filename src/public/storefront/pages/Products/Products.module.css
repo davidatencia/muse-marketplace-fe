@@ -50,45 +50,6 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-sm);
-}
-
-.card {
-  background: var(--color-surface);
-  border-radius: 16px;
-  padding: var(--space-sm);
-}
-
-.category {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--color-text-muted);
-  margin: var(--space-sm) 0 4px;
-}
-
-.name {
-  font-size: 18px;
-  margin: 0 0 8px;
-  color: var(--color-text);
-}
-
-.price {
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0;
-  color: var(--color-text);
-}
-
-@media (max-width: 860px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 560px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-md);
 }

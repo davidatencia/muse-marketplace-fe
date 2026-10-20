@@ -1,22 +1,25 @@
 import { useSearchParams } from 'react-router';
-import ImagePlaceholder from '@shared/components/ui/ImagePlaceholder/ImagePlaceholder';
+import ProductCard from '@public/storefront/components/catalog/ProductCard/ProductCard';
 import SectionHeading from '@shared/components/ui/SectionHeading/SectionHeading';
 import { useAccessories } from '@shared/api/accessoriesQueries';
+import { useRevealOnScroll } from '@shared/hooks/useRevealOnScroll';
 import { getErrorMessage } from '@shared/utils/getErrorMessage';
 import styles from './Products.module.css';
 
-const currencyFormatter = new Intl.NumberFormat('es-CO', {
-  style: 'currency',
-  currency: 'COP',
-  maximumFractionDigits: 0,
-});
+// Must match the links built in the home "Categorías destacadas" section.
+const CATEGORY_PARAM = 'categoria';
+
+function isSameCategory(a: string, b: string | null) {
+  return b !== null && a.trim().toLowerCase() === b.trim().toLowerCase();
+}
 
 function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const selectedCategory = searchParams.get('category');
+  const selectedCategory = searchParams.get(CATEGORY_PARAM);
 
   const { data: products = [], isPending: isLoading, error: loadError } =
     useAccessories();
+  const gridRef = useRevealOnScroll<HTMLUListElement>();
   const error = loadError
     ? getErrorMessage(loadError, 'No se pudo cargar el catálogo')
     : null;
@@ -24,12 +27,14 @@ function Products() {
   const categories = Array.from(new Set(products.map((product) => product.category)));
 
   const visibleProducts = selectedCategory
-    ? products.filter((product) => product.category === selectedCategory)
+    ? products.filter((product) =>
+        isSameCategory(product.category, selectedCategory),
+      )
     : products;
 
   function handleSelectCategory(category: string | null) {
     if (category) {
-      setSearchParams({ category });
+      setSearchParams({ [CATEGORY_PARAM]: category });
     } else {
       setSearchParams({});
     }
@@ -64,7 +69,7 @@ function Products() {
                   <button
                     type="button"
                     className={styles.filter}
-                    data-active={selectedCategory === category}
+                    data-active={isSameCategory(category, selectedCategory)}
                     onClick={() => handleSelectCategory(category)}
                   >
                     {category}
@@ -75,15 +80,10 @@ function Products() {
             {visibleProducts.length === 0 ? (
               <p className={styles.status}>Todavía no hay productos en esta categoría.</p>
             ) : (
-              <ul className={styles.grid}>
+              <ul ref={gridRef} className={styles.grid}>
                 {visibleProducts.map((product) => (
-                  <li key={product.id} className={styles.card}>
-                    <ImagePlaceholder label={product.name} src={product.img} />
-                    <p className={styles.category}>{product.category}</p>
-                    <h3 className={styles.name}>{product.name}</h3>
-                    <p className={styles.price}>
-                      {currencyFormatter.format(product.price)}
-                    </p>
+                  <li key={product.id} data-reveal="hidden">
+                    <ProductCard product={product} />
                   </li>
                 ))}
               </ul>
