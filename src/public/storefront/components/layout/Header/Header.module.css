@@ -46,6 +46,17 @@
   color: var(--color-accent);
 }
 
+.desktopNav {
+  margin-left: auto;
+  margin-right: var(--space-md);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .menuToggle {
   display: none;
   align-items: center;

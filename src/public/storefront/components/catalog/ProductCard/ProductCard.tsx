@@ -1,5 +1,7 @@
 import type { CSSProperties } from 'react';
 import ImagePlaceholder from '@shared/components/ui/ImagePlaceholder/ImagePlaceholder';
+import { useCart } from '@public/storefront/context/CartProvider/useCart';
+import { formatCurrency } from '@shared/utils/formatCurrency';
 import type { Accessory } from '@shared/types/accessory';
 import styles from './ProductCard.module.css';
 
@@ -12,12 +14,6 @@ const ACCENTS = [
   'var(--color-cal-poly-green)',
 ];
 
-const currencyFormatter = new Intl.NumberFormat('es-CO', {
-  style: 'currency',
-  currency: 'COP',
-  maximumFractionDigits: 0,
-});
-
 function accentFor(category: string) {
   let hash = 0;
   for (const char of category) {
@@ -28,15 +24,11 @@ function accentFor(category: string) {
 
 interface ProductCardProps {
   product: Accessory;
-  showAddToCart?: boolean;
-  onAddToCart?: (product: Accessory) => void;
 }
 
-function ProductCard({
-  product,
-  showAddToCart = false,
-  onAddToCart,
-}: ProductCardProps) {
+function ProductCard({ product }: ProductCardProps) {
+  const { addItem, getQuantity, openCart } = useCart();
+  const quantityInCart = getQuantity(product.id);
   const isSoldOut = product.stock <= 0;
   const isLowStock = !isSoldOut && product.stock <= LOW_STOCK_THRESHOLD;
   const style = { '--accent': accentFor(product.category) } as CSSProperties;
@@ -103,7 +95,7 @@ function ProductCard({
 
         <div className={styles.meta}>
           <span className={styles.price}>
-            {currencyFormatter.format(product.price)}
+            {formatCurrency(product.price)}
           </span>
           {product.rating !== null && (
             <p
@@ -127,16 +119,29 @@ function ProductCard({
           </ul>
         )}
 
-        {showAddToCart && (
+        <div className={styles.actions}>
           <button
             type="button"
             className={styles.addToCart}
-            disabled={isSoldOut}
-            onClick={() => onAddToCart?.(product)}
+            disabled={isSoldOut || quantityInCart >= product.stock}
+            onClick={() => addItem(product)}
           >
-            {isSoldOut ? 'Agotado' : 'Agregar al carrito'}
+            {isSoldOut
+              ? 'Agotado'
+              : quantityInCart > 0
+                ? `Agregar otro (${quantityInCart})`
+                : 'Agregar al carrito'}
           </button>
-        )}
+          {quantityInCart > 0 && (
+            <button
+              type="button"
+              className={styles.viewCart}
+              onClick={openCart}
+            >
+              Ver carrito
+            </button>
+          )}
+        </div>
       </div>
     </article>
   );

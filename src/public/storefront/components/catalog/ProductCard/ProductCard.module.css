@@ -263,8 +263,15 @@
   color: var(--color-bg);
 }
 
+.actions {
+  margin-top: auto;
+  padding-top: var(--space-xs);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 .addToCart {
-  margin-top: var(--space-xs);
   width: 100%;
   padding: 14px;
   border: none;
@@ -284,6 +291,18 @@
 .addToCart:disabled {
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+.viewCart {
+  align-self: center;
+  border: none;
+  background: none;
+  padding: 2px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 /* ---------- Interaction ---------- */

@@ -26,7 +26,6 @@ function Contact({ heading, details, eyebrow }: ContactProps) {
           <SectionHeading eyebrow={eyebrow} title={heading} tone="light" />
           <ul className={styles.details}>
             <li>{details.email}</li>
-            <li>{details.phone}</li>
             <li>{details.address}</li>
           </ul>
         </div>

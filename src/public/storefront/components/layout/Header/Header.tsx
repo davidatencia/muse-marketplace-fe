@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import logo from '@shared/assets/logos/logo-mark.png';
+import CartButton from '@public/storefront/components/cart/CartButton/CartButton';
 import type { NavLink } from '@public/storefront/types/content';
 import styles from './Header.module.css';
 
@@ -36,21 +37,24 @@ function Header({ links }: HeaderProps) {
           </ul>
         </nav>
 
-        <button
-          type="button"
-          className={styles.menuToggle}
-          aria-expanded={isMenuOpen}
-          aria-controls="mobile-menu"
-          aria-label={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
-          onClick={() => setIsMenuOpen((open) => !open)}
-        >
-          <img
-            src="https://res.cloudinary.com/iyrl9jhg/image/upload/v1786636102/hamburger-menu.svg"
-            alt=""
-            aria-hidden="true"
-            className={styles.menuIcon}
-          />
-        </button>
+        <div className={styles.actions}>
+          <CartButton />
+          <button
+            type="button"
+            className={styles.menuToggle}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-menu"
+            aria-label={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+            onClick={() => setIsMenuOpen((open) => !open)}
+          >
+            <img
+              src="https://res.cloudinary.com/iyrl9jhg/image/upload/v1786636102/hamburger-menu.svg"
+              alt=""
+              aria-hidden="true"
+              className={styles.menuIcon}
+            />
+          </button>
+        </div>
       </div>
 
       {isMenuOpen && (
