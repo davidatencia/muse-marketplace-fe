@@ -26,7 +26,6 @@ export interface GalleryItem {
 
 export interface ContactDetails {
   email: string;
-  phone: string;
   address: string;
   instagram: string;
 }

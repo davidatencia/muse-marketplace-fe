@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router';
+import { useQueryClient } from '@tanstack/react-query';
 import Button from '@shared/components/ui/Button/Button';
-import { clearTokens } from '@shared/api/tokenStorage';
+import { clearSession } from '@shared/api/session';
+import { getUserName } from '@shared/api/userInformationStorage';
 import logo from '@shared/assets/logos/logo-mark.png';
 import styles from './DashboardLayout.module.css';
-import {
-  clearUserInformation,
-  getUserName,
-} from '@/shared/api/userInformationStorage';
 
 const navItems = [
   { to: '/dashboard/categorias', label: 'Categorías' },
@@ -21,6 +19,7 @@ function linkClassName({ isActive }: { isActive: boolean }) {
 
 function DashboardLayout() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   function closeMenu() {
@@ -29,8 +28,8 @@ function DashboardLayout() {
 
   function handleLogout() {
     closeMenu();
-    clearTokens();
-    clearUserInformation();
+    clearSession();
+    queryClient.clear();
     navigate('/login');
   }
 

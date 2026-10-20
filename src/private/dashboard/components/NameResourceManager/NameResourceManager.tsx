@@ -1,27 +1,19 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { FormEvent } from 'react';
 import Button from '@shared/components/ui/Button/Button';
 import { getErrorMessage } from '@shared/utils/getErrorMessage';
+import type {
+  NameResource,
+  NameResourceQueries,
+} from '@private/dashboard/api/nameResourceQueries';
 import styles from './NameResourceManager.module.css';
-
-interface NameResource {
-  id: number;
-  name: string;
-}
-
-interface NamePayload {
-  name: string;
-}
 
 interface NameResourceManagerProps {
   heading: string;
   description: string;
   singularLabel: string;
   loadErrorMessage: string;
-  fetchAll: () => Promise<NameResource[]>;
-  create: (payload: NamePayload) => Promise<unknown>;
-  update: (id: number, payload: NamePayload) => Promise<unknown>;
-  remove: (id: number) => Promise<unknown>;
+  resource: NameResourceQueries;
 }
 
 function NameResourceManager({
@@ -29,66 +21,44 @@ function NameResourceManager({
   description,
   singularLabel,
   loadErrorMessage,
-  fetchAll,
-  create,
-  update,
-  remove,
+  resource,
 }: NameResourceManagerProps) {
-  const [items, setItems] = useState<NameResource[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { query, createMutation, updateMutation, removeMutation } = resource;
+  const items = query.data ?? [];
   const [newName, setNewName] = useState('');
-  const [isSaving, setIsSaving] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editingName, setEditingName] = useState('');
 
-  const loadItems = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      setItems(await fetchAll());
-    } catch (err) {
-      setError(getErrorMessage(err, loadErrorMessage));
-    } finally {
-      setIsLoading(false);
-    }
-  }, [fetchAll, loadErrorMessage]);
+  const error = createMutation.error
+    ? getErrorMessage(createMutation.error, `No se pudo crear ${singularLabel}`)
+    : updateMutation.error
+      ? getErrorMessage(
+          updateMutation.error,
+          `No se pudo actualizar ${singularLabel}`,
+        )
+      : removeMutation.error
+        ? getErrorMessage(
+            removeMutation.error,
+            `No se pudo eliminar ${singularLabel}`,
+          )
+        : query.error
+          ? getErrorMessage(query.error, loadErrorMessage)
+          : null;
 
-  useEffect(() => {
-    let ignore = false;
+  // Only the latest action's error should be visible.
+  function resetErrors() {
+    createMutation.reset();
+    updateMutation.reset();
+    removeMutation.reset();
+  }
 
-    fetchAll()
-      .then((data) => {
-        if (!ignore) setItems(data);
-      })
-      .catch((err) => {
-        if (!ignore) setError(getErrorMessage(err, loadErrorMessage));
-      })
-      .finally(() => {
-        if (!ignore) setIsLoading(false);
-      });
-
-    return () => {
-      ignore = true;
-    };
-  }, [fetchAll, loadErrorMessage]);
-
-  async function handleCreate(event: FormEvent<HTMLFormElement>) {
+  function handleCreate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const name = newName.trim();
     if (!name) return;
 
-    setIsSaving(true);
-    setError(null);
-    try {
-      await create({ name });
-      setNewName('');
-      await loadItems();
-    } catch (err) {
-      setError(getErrorMessage(err, `No se pudo crear ${singularLabel}`));
-    } finally {
-      setIsSaving(false);
-    }
+    resetErrors();
+    createMutation.mutate({ name }, { onSuccess: () => setNewName('') });
   }
 
   function startEditing(item: NameResource) {
@@ -101,35 +71,20 @@ function NameResourceManager({
     setEditingName('');
   }
 
-  async function handleUpdate(id: number) {
+  function handleUpdate(id: number) {
     const name = editingName.trim();
     if (!name) return;
 
-    setIsSaving(true);
-    setError(null);
-    try {
-      await update(id, { name });
-      setItems((current) =>
-        current.map((item) => (item.id === id ? { ...item, name } : item)),
-      );
-      cancelEditing();
-    } catch (err) {
-      setError(getErrorMessage(err, `No se pudo actualizar ${singularLabel}`));
-    } finally {
-      setIsSaving(false);
-    }
+    resetErrors();
+    updateMutation.mutate({ id, name });
+    cancelEditing();
   }
 
-  async function handleDelete(id: number) {
+  function handleDelete(id: number) {
     if (!window.confirm(`¿Eliminar ${singularLabel}?`)) return;
 
-    setError(null);
-    try {
-      await remove(id);
-      setItems((current) => current.filter((item) => item.id !== id));
-    } catch (err) {
-      setError(getErrorMessage(err, `No se pudo eliminar ${singularLabel}`));
-    }
+    resetErrors();
+    removeMutation.mutate(id);
   }
 
   return (
@@ -147,14 +102,14 @@ function NameResourceManager({
           onChange={(event) => setNewName(event.target.value)}
           required
         />
-        <Button type="submit" disabled={isSaving}>
-          Agregar
+        <Button type="submit" disabled={createMutation.isPending}>
+          {createMutation.isPending ? 'Agregando...' : 'Agregar'}
         </Button>
       </form>
 
       {error && <p className={styles.error}>{error}</p>}
 
-      {isLoading ? null : items.length === 0 ? (
+      {query.isPending ? null : items.length === 0 ? (
         <p className={styles.status}>Todavía no hay registros.</p>
       ) : (
         <ul className={styles.list}>
@@ -173,7 +128,6 @@ function NameResourceManager({
                       type="button"
                       className={styles.linkButton}
                       onClick={() => handleUpdate(item.id)}
-                      disabled={isSaving}
                     >
                       Guardar
                     </button>

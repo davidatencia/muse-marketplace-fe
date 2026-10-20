@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router';
+import CartDrawer from '@public/storefront/components/cart/CartDrawer/CartDrawer';
 import Footer from '@public/storefront/components/layout/Footer/Footer';
 import Header from '@public/storefront/components/layout/Header/Header';
 import { contactDetails } from '@public/storefront/data/contact';
@@ -17,6 +18,7 @@ function MainLayout({ navOptions = navLinks }: MainLayoutProps) {
         <Outlet />
       </main>
       <Footer links={navLinks} contact={contactDetails} />
+      <CartDrawer />
     </>
   );
 }

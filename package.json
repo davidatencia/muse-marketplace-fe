@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@firecms/neat": "^1.0.2",
-    "axios": "^1.19.0",
+    "@tanstack/react-query": "^5.101.4",
     "js-cookie": "^3.0.8",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",

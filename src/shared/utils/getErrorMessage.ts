@@ -1,8 +1,12 @@
-import { isAxiosError } from 'axios';
+import { ApiError } from '@shared/api/httpClient';
 
 export function getErrorMessage(error: unknown, fallback: string) {
-  if (isAxiosError<{ message: string }>(error) && error.response) {
-    return error.response.data.message;
+  if (error instanceof ApiError) {
+    const data = error.data as { message?: string } | undefined;
+
+    if (data?.message) {
+      return data.message;
+    }
   }
 
   return fallback;

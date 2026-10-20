@@ -30,7 +30,6 @@ function Footer({ links, contact }: FooterProps) {
         </nav>
         <div className={styles.contact}>
           <p>{contact.email}</p>
-          <p>{contact.phone}</p>
           <p>{contact.address}</p>
         </div>
       </div>
