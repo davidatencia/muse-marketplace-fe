@@ -1,50 +1,43 @@
-import { useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router';
 import Button from '@shared/components/ui/Button/Button';
 import ImagePlaceholder from '@shared/components/ui/ImagePlaceholder/ImagePlaceholder';
-import { deleteAccessory } from '@private/dashboard/api/accessoriesApi';
-import { getAccessories } from '@shared/api/accessoriesApi';
+import { useDeleteAccessory } from '@private/dashboard/api/accessoriesQueries';
+import { categoriesQueryOptions } from '@private/dashboard/api/categoriesQueries';
+import { materialsQueryOptions } from '@private/dashboard/api/materialsQueries';
+import {
+  accessoryQueryOptions,
+  useAccessories,
+} from '@shared/api/accessoriesQueries';
 import { getErrorMessage } from '@shared/utils/getErrorMessage';
-import type { Accessory } from '@shared/types/accessory';
 import styles from './Accessories.module.css';
 
 function Accessories() {
-  const [accessories, setAccessories] = useState<Accessory[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+  const {
+    data: accessories = [],
+    isPending,
+    error: loadError,
+  } = useAccessories();
+  const deleteMutation = useDeleteAccessory();
 
-  useEffect(() => {
-    let ignore = false;
-
-    getAccessories()
-      .then((data) => {
-        if (!ignore) setAccessories(data);
-      })
-      .catch((err) => {
-        if (!ignore) {
-          setError(getErrorMessage(err, 'No se pudieron cargar los accesorios'));
-        }
-      })
-      .finally(() => {
-        if (!ignore) setIsLoading(false);
-      });
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
-
-  async function handleDelete(id: string) {
+  function handleDelete(id: string) {
     if (!window.confirm('¿Eliminar este accesorio?')) return;
-
-    setError(null);
-    try {
-      await deleteAccessory(id);
-      setAccessories((current) => current.filter((accessory) => accessory.id !== id));
-    } catch (err) {
-      setError(getErrorMessage(err, 'No se pudo eliminar el accesorio'));
-    }
+    deleteMutation.mutate(id);
   }
+
+  // Warm the cache for the edit form so it opens without a loading state.
+  function prefetchEditForm(id: string) {
+    queryClient.prefetchQuery(accessoryQueryOptions(id));
+    queryClient.prefetchQuery(categoriesQueryOptions());
+    queryClient.prefetchQuery(materialsQueryOptions());
+  }
+
+  const errorMessage = deleteMutation.error
+    ? getErrorMessage(deleteMutation.error, 'No se pudo eliminar el accesorio')
+    : loadError
+      ? getErrorMessage(loadError, 'No se pudieron cargar los accesorios')
+      : null;
 
   return (
     <div className={styles.page}>
@@ -58,9 +51,9 @@ function Accessories() {
         <Button href="/dashboard/accesorios/nuevo">Nuevo accesorio</Button>
       </div>
 
-      {error && <p className={styles.error}>{error}</p>}
+      {errorMessage && <p className={styles.error}>{errorMessage}</p>}
 
-      {isLoading ? null : accessories.length === 0 ? (
+      {isPending ? null : accessories.length === 0 ? (
         <p className={styles.status}>Todavía no hay accesorios registrados.</p>
       ) : (
         <div className={styles.tableWrapper}>
@@ -102,6 +95,8 @@ function Accessories() {
                     <Link
                       to={`/dashboard/accesorios/${accessory.id}/editar`}
                       className={styles.editLink}
+                      onMouseEnter={() => prefetchEditForm(accessory.id)}
+                      onFocus={() => prefetchEditForm(accessory.id)}
                     >
                       Editar
                     </Link>

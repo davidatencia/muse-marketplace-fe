@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import ImagePlaceholder from '@shared/components/ui/ImagePlaceholder/ImagePlaceholder';
 import SectionHeading from '@shared/components/ui/SectionHeading/SectionHeading';
-import { getAccessories } from '@shared/api/accessoriesApi';
+import { useAccessories } from '@shared/api/accessoriesQueries';
 import { getErrorMessage } from '@shared/utils/getErrorMessage';
-import type { Accessory } from '@shared/types/accessory';
 import styles from './Products.module.css';
 
 const currencyFormatter = new Intl.NumberFormat('es-CO', {
@@ -17,30 +15,11 @@ function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedCategory = searchParams.get('category');
 
-  const [products, setProducts] = useState<Accessory[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let ignore = false;
-
-    getAccessories()
-      .then((data) => {
-        if (!ignore) setProducts(data);
-      })
-      .catch((err) => {
-        if (!ignore) {
-          setError(getErrorMessage(err, 'No se pudo cargar el catálogo'));
-        }
-      })
-      .finally(() => {
-        if (!ignore) setIsLoading(false);
-      });
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
+  const { data: products = [], isPending: isLoading, error: loadError } =
+    useAccessories();
+  const error = loadError
+    ? getErrorMessage(loadError, 'No se pudo cargar el catálogo')
+    : null;
 
   const categories = Array.from(new Set(products.map((product) => product.category)));
 
