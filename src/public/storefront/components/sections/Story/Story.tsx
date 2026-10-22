@@ -3,6 +3,10 @@ import Eyebrow from '@shared/components/ui/Eyebrow/Eyebrow';
 import ImagePlaceholder from '@shared/components/ui/ImagePlaceholder/ImagePlaceholder';
 import styles from './Story.module.css';
 
+// Cloudinary resizes and picks the best format; the original is ~3000x4000.
+const PORTRAIT_URL =
+  'https://res.cloudinary.com/iyrl9jhg/image/upload/f_auto,q_auto,c_limit,w_900/v1786636136/cami-retrato.jpg';
+
 interface StoryProps {
   heading: string;
   paragraphs: string[];
@@ -21,11 +25,19 @@ function Story({
   return (
     <section id="nosotros" className={styles.story}>
       <div className={styles.media}>
-        <ImagePlaceholder
-          src="https://res.cloudinary.com/iyrl9jhg/image/upload/v1786636136/cami-retrato.jpg"
-          ratio="1 / 1"
-          label="Foto de la marca"
-        />
+        <div className={styles.frame}>
+          <ImagePlaceholder
+            src={PORTRAIT_URL}
+            ratio="4 / 5"
+            label="Foto de la marca"
+          />
+        </div>
+        <span className={styles.badge}>
+          <span aria-hidden="true">✦</span> Hecho a mano
+        </span>
+        <span className={styles.sparkle} aria-hidden="true">
+          ✦
+        </span>
       </div>
       <div className={styles.content}>
         {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}

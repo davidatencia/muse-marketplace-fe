@@ -53,3 +53,15 @@
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: var(--space-md);
 }
+
+/* Two columns on phones so shoppers can browse several products at once. */
+@media (max-width: 600px) {
+  .inner {
+    padding: 0 var(--space-sm);
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
