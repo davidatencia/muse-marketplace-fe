@@ -19,7 +19,10 @@ export function useCreateAccessory() {
   return useMutation({
     mutationFn: createAccessory,
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: accessoryKeys.all }),
+      queryClient.invalidateQueries({
+        queryKey: accessoryKeys.all,
+        refetchType: 'none',
+      }),
   });
 }
 
@@ -30,7 +33,10 @@ export function useUpdateAccessory() {
     mutationFn: ({ id, payload }: UpdateAccessoryVariables) =>
       updateAccessory(id, payload),
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: accessoryKeys.all }),
+      queryClient.invalidateQueries({
+        queryKey: accessoryKeys.all,
+        refetchType: 'none',
+      }),
   });
 }
 
@@ -40,7 +46,6 @@ export function useDeleteAccessory() {
 
   return useMutation({
     mutationFn: deleteAccessory,
-    // Remove the row right away and restore the previous list if the API fails.
     onMutate: async (id: string) => {
       await queryClient.cancelQueries({ queryKey });
       const previous = queryClient.getQueryData(queryKey);

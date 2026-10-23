@@ -1,96 +1,232 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: 24px;
 }
 
-.header {
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.toolbar {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: var(--space-sm);
   flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--dash-border);
 }
 
-.heading {
-  font-size: 32px;
+.search {
+  position: relative;
+  flex: 1;
+  max-width: 380px;
+  min-width: 220px;
 }
 
-.description {
-  color: var(--color-text-muted);
-  margin-top: 4px;
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #a69bab;
+  pointer-events: none;
 }
 
-.status {
-  color: var(--color-text-muted);
+.searchInput {
+  padding-left: 38px;
 }
 
-.error {
-  color: #b3261e;
+.count {
   margin: 0;
-}
-
-.tableWrapper {
-  overflow-x: auto;
+  font-size: 13px;
+  color: var(--color-text-muted);
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 720px;
 }
 
 .table th {
-  text-align: left;
-  font-size: 13px;
-  text-transform: uppercase;
+  padding: 12px 20px;
+  background: var(--dash-bg);
+  border-bottom: 1px solid var(--dash-border);
+  font-size: 12px;
+  font-weight: 700;
   letter-spacing: 0.04em;
+  text-align: left;
+  text-transform: uppercase;
   color: var(--color-text-muted);
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--color-thistle);
+  white-space: nowrap;
 }
 
 .table td {
-  padding: 12px;
-  border-bottom: 1px solid var(--color-thistle);
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--dash-border);
+  font-size: 14px;
   vertical-align: middle;
 }
 
-.imageCell {
-  width: 64px;
+.table tbody tr {
+  transition: background 0.15s ease;
+}
+
+.table tbody tr:hover {
+  background: #fcfafd;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.numeric {
+  text-align: right;
+}
+
+.table th.numeric {
+  text-align: right;
+}
+
+.product {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 220px;
 }
 
 .thumb {
+  flex-shrink: 0;
   width: 48px;
+  overflow: hidden;
+  border: 1px solid var(--dash-border);
+  border-radius: 10px;
+  background: var(--dash-bg);
 }
 
-.badge {
-  display: inline-block;
-  margin-left: 8px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--color-thistle);
-  color: var(--color-dark-purple);
-  font-size: 12px;
+.thumb > * {
+  border-radius: 0;
+  mix-blend-mode: multiply;
+}
+
+.thumb > [role='img'] {
+  font-size: 0;
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.productName {
   font-weight: 600;
+  color: var(--color-text);
+}
+
+.productFlags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.productFlags:empty {
+  display: none;
+}
+
+.flag,
+.flagFeatured {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.flagFeatured {
+  color: #a87a00;
+}
+
+.price {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.materials {
+  color: var(--color-text-muted);
 }
 
 .actionsCell {
   white-space: nowrap;
+  text-align: right;
 }
 
-.editLink {
-  font-weight: 600;
-  color: var(--color-accent);
-  text-decoration: none;
-  margin-right: var(--space-sm);
+.actionsCell > * + * {
+  margin-left: 4px;
 }
 
-.deleteButton {
-  background: none;
-  border: none;
-  padding: 0;
-  font-size: 14px;
-  font-weight: 600;
-  color: #b3261e;
+@media (max-width: 760px) {
+  .search {
+    max-width: none;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+  }
+
+  .table tbody tr {
+    position: relative;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--dash-border);
+  }
+
+  .table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .table td {
+    padding: 0;
+    border: none;
+  }
+
+  .table td[data-label] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 10px;
+    text-align: right;
+  }
+
+  .table td[data-label]::before {
+    content: attr(data-label);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-align: left;
+  }
+
+  .product {
+    min-width: 0;
+    padding-right: 80px;
+  }
+
+  .actionsCell {
+    position: absolute;
+    top: 16px;
+    right: 14px;
+  }
 }
