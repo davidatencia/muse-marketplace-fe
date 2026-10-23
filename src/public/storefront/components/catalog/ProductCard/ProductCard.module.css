@@ -335,3 +335,110 @@
     transform: none;
   }
 }
+
+/* ---------- Compact (2-column phone grid) ---------- */
+
+.featuredLabel {
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .card {
+    --tab-radius: 14px;
+
+    gap: 10px;
+    padding: 8px;
+    border-radius: 20px;
+    box-shadow: 0 6px 18px rgba(58, 28, 54, 0.08);
+  }
+
+  .media,
+  .imageWrap {
+    border-radius: 14px;
+  }
+
+  .categoryTab {
+    max-width: 80%;
+    padding: 5px 12px 7px 2px;
+    font-size: 11px;
+  }
+
+  /* Star only: the label stays available to screen readers. */
+  .featured {
+    top: 6px;
+    right: 6px;
+    padding: 4px 6px;
+  }
+
+  .featuredLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .stockBadge {
+    left: 6px;
+    bottom: 6px;
+    max-width: calc(100% - 12px);
+    padding: 3px 8px;
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* No room for description/materials in a half-width card. */
+  .details {
+    display: none;
+  }
+
+  .body {
+    gap: 6px;
+    padding: 0 2px 2px;
+  }
+
+  .name {
+    font-size: 15px;
+  }
+
+  .meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .price {
+    padding: 4px 10px;
+    font-size: 13px;
+  }
+
+  .rating {
+    gap: 4px;
+    font-size: 11px;
+  }
+
+  .stars {
+    letter-spacing: 0;
+  }
+
+  .tag {
+    padding: 3px 8px;
+    font-size: 11px;
+  }
+
+  .actions {
+    padding-top: 4px;
+    gap: 2px;
+  }
+
+  .addToCart {
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+
+  .viewCart {
+    font-size: 12px;
+  }
+}

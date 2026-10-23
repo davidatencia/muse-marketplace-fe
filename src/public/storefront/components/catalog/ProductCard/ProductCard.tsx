@@ -45,7 +45,8 @@ function ProductCard({ product }: ProductCardProps) {
 
         {product.highlighted && (
           <span className={styles.featured}>
-            <span aria-hidden="true">★</span> Destacado
+            <span aria-hidden="true">★</span>{' '}
+            <span className={styles.featuredLabel}>Destacado</span>
           </span>
         )}
 
