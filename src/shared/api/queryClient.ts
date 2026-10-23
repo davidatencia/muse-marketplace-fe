@@ -4,6 +4,8 @@ import { clearSession } from '@shared/api/session';
 
 const MAX_RETRIES = 3;
 
+const DEFAULT_STALE_TIME = 60_000;
+
 function isClientError(error: unknown) {
   return error instanceof ApiError && error.status >= 400 && error.status < 500;
 }
@@ -24,6 +26,7 @@ export const queryClient = new QueryClient({
   mutationCache: new MutationCache({ onError: handleError }),
   defaultOptions: {
     queries: {
+      staleTime: DEFAULT_STALE_TIME,
       retry: (failureCount, error) =>
         !isClientError(error) && failureCount < MAX_RETRIES,
     },

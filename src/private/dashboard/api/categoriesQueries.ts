@@ -6,7 +6,7 @@ import {
   updateCategory,
 } from '@private/dashboard/api/categoriesApi';
 import { useNameResource } from '@private/dashboard/api/nameResourceQueries';
-import { categoryKeys } from '@shared/api/queryKeys';
+import { accessoryKeys, categoryKeys } from '@shared/api/queryKeys';
 
 export function categoriesQueryOptions() {
   return queryOptions({
@@ -22,8 +22,8 @@ export function useCategories() {
 
 export function useCategoriesManager() {
   return useNameResource({
-    queryKey: categoryKeys.all,
-    fetchAll: getCategories,
+    queryOptions: categoriesQueryOptions(),
+    dependentKeys: [accessoryKeys.all],
     create: createCategory,
     update: updateCategory,
     remove: deleteCategory,

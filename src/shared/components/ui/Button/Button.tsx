@@ -3,11 +3,13 @@ import { Link } from 'react-router';
 import styles from './Button.module.css';
 
 type ButtonVariant = 'primary' | 'outline';
+type ButtonSize = 'md' | 'sm';
 
 interface ButtonProps {
   children: ReactNode;
   href?: string;
   variant?: ButtonVariant;
+  size?: ButtonSize;
   type?: 'button' | 'submit';
   onClick?: MouseEventHandler;
   disabled?: boolean;
@@ -17,11 +19,14 @@ function Button({
   children,
   href,
   variant = 'primary',
+  size = 'md',
   type = 'button',
   onClick,
   disabled = false,
 }: ButtonProps) {
-  const className = `${styles.button} ${styles[variant]}`;
+  const className = `${styles.button} ${styles[variant]} ${
+    size === 'sm' ? styles.sm : ''
+  }`;
 
   if (href) {
     if (href.startsWith('/')) {

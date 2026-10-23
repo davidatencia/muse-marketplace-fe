@@ -8,6 +8,15 @@ import {
 import { useCategories } from '@private/dashboard/api/categoriesQueries';
 import { useMaterials } from '@private/dashboard/api/materialsQueries';
 import { useAccessory } from '@shared/api/accessoriesQueries';
+import { AlertIcon } from '@private/dashboard/components/ui/icons';
+import {
+  getChangedFields,
+  hasChanges,
+  toAccessoryPayload,
+} from '@private/dashboard/utils/accessoryPayload';
+import type { EditableAccessoryValues } from '@private/dashboard/utils/accessoryPayload';
+import PageHeader from '@private/dashboard/components/ui/PageHeader/PageHeader';
+import ui from '@private/dashboard/styles/ui.module.css';
 import { getErrorMessage } from '@shared/utils/getErrorMessage';
 import type { Accessory } from '@shared/types/accessory';
 import type { Category } from '@private/dashboard/types/category';
@@ -18,7 +27,7 @@ function toFormValues(
   accessory: Accessory,
   categories: Category[],
   materials: Material[],
-): Partial<AccessoryFormValues> {
+): EditableAccessoryValues {
   const category = categories.find((item) => item.name === accessory.category);
   const materialIds = materials
     .filter((material) => accessory.materials.includes(material.name))
@@ -76,24 +85,19 @@ function AccessoryFormPage() {
   }
 
   function handleSubmit(values: AccessoryFormValues) {
-    const basePayload = {
-      name: values.name.trim(),
-      description: values.description.trim(),
-      img: values.img.trim(),
-      category_id: Number(values.categoryId),
-      handmade: values.handmade,
-      highlighted: values.highlighted,
-      price: Number(values.price),
-      stock: Number(values.stock),
-      rating: values.rating ? Number(values.rating) : null,
-      materials: values.materialIds.map(Number),
-    };
+    const basePayload = toAccessoryPayload(values);
 
     if (id) {
-      updateMutation.mutate(
-        { id, payload: basePayload },
-        { onSuccess: goToList },
-      );
+      const changes = initialValues
+        ? getChangedFields(basePayload, toAccessoryPayload(initialValues))
+        : basePayload;
+
+      if (!hasChanges(changes)) {
+        goToList();
+        return;
+      }
+
+      updateMutation.mutate({ id, payload: changes }, { onSuccess: goToList });
     } else {
       createMutation.mutate(
         { ...basePayload, available: values.available },
@@ -108,10 +112,21 @@ function AccessoryFormPage() {
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.heading}>
-        {isEditMode ? 'Editar accesorio' : 'Nuevo accesorio'}
-      </h1>
-      {errorMessage && <p className={styles.error}>{errorMessage}</p>}
+      <PageHeader
+        title={isEditMode ? 'Editar accesorio' : 'Nuevo accesorio'}
+        description={
+          isEditMode
+            ? 'Actualiza la información que ven tus clientes.'
+            : 'Completa la información para publicarlo en la tienda.'
+        }
+        breadcrumb={{ label: 'Accesorios', to: '/dashboard/accesorios' }}
+      />
+      {errorMessage && (
+        <p className={ui.alert} role="alert">
+          <AlertIcon />
+          {errorMessage}
+        </p>
+      )}
       <AccessoryForm
         mode={isEditMode ? 'edit' : 'create'}
         categories={categories}

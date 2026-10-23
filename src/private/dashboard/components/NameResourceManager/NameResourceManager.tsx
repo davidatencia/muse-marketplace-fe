@@ -1,6 +1,17 @@
 import { useState } from 'react';
-import type { FormEvent } from 'react';
+import type { FormEvent, KeyboardEvent, ReactNode } from 'react';
 import Button from '@shared/components/ui/Button/Button';
+import {
+  AlertIcon,
+  CheckIcon,
+  PencilIcon,
+  PlusIcon,
+  TagIcon,
+  TrashIcon,
+  XIcon,
+} from '@private/dashboard/components/ui/icons';
+import PageHeader from '@private/dashboard/components/ui/PageHeader/PageHeader';
+import ui from '@private/dashboard/styles/ui.module.css';
 import { getErrorMessage } from '@shared/utils/getErrorMessage';
 import type {
   NameResource,
@@ -14,6 +25,7 @@ interface NameResourceManagerProps {
   singularLabel: string;
   loadErrorMessage: string;
   resource: NameResourceQueries;
+  icon?: ReactNode;
 }
 
 function NameResourceManager({
@@ -22,6 +34,7 @@ function NameResourceManager({
   singularLabel,
   loadErrorMessage,
   resource,
+  icon = <TagIcon size={22} />,
 }: NameResourceManagerProps) {
   const { query, createMutation, updateMutation, removeMutation } = resource;
   const items = query.data ?? [];
@@ -45,7 +58,6 @@ function NameResourceManager({
           ? getErrorMessage(query.error, loadErrorMessage)
           : null;
 
-  // Only the latest action's error should be visible.
   function resetErrors() {
     createMutation.reset();
     updateMutation.reset();
@@ -71,100 +83,153 @@ function NameResourceManager({
     setEditingName('');
   }
 
-  function handleUpdate(id: number) {
+  function handleUpdate(item: NameResource) {
     const name = editingName.trim();
     if (!name) return;
 
+    if (name === item.name) {
+      cancelEditing();
+      return;
+    }
+
     resetErrors();
-    updateMutation.mutate({ id, name });
+    updateMutation.mutate({ id: item.id, name });
     cancelEditing();
   }
 
-  function handleDelete(id: number) {
-    if (!window.confirm(`¿Eliminar ${singularLabel}?`)) return;
+  function handleEditKeyDown(
+    event: KeyboardEvent<HTMLInputElement>,
+    item: NameResource,
+  ) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleUpdate(item);
+    } else if (event.key === 'Escape') {
+      cancelEditing();
+    }
+  }
+
+  function handleDelete(item: NameResource) {
+    if (!window.confirm(`¿Eliminar ${singularLabel} "${item.name}"?`)) return;
 
     resetErrors();
-    removeMutation.mutate(id);
+    removeMutation.mutate(item.id);
   }
 
   return (
     <div className={styles.page}>
-      <div>
-        <h1 className={styles.heading}>{heading}</h1>
-        <p className={styles.description}>{description}</p>
-      </div>
+      <PageHeader title={heading} description={description} />
 
-      <form className={styles.createForm} onSubmit={handleCreate}>
-        <input
-          className={styles.input}
-          placeholder="Nombre"
-          value={newName}
-          onChange={(event) => setNewName(event.target.value)}
-          required
-        />
-        <Button type="submit" disabled={createMutation.isPending}>
-          {createMutation.isPending ? 'Agregando...' : 'Agregar'}
-        </Button>
-      </form>
-
-      {error && <p className={styles.error}>{error}</p>}
-
-      {query.isPending ? null : items.length === 0 ? (
-        <p className={styles.status}>Todavía no hay registros.</p>
-      ) : (
-        <ul className={styles.list}>
-          {items.map((item) => (
-            <li key={item.id} className={styles.item}>
-              {editingId === item.id ? (
-                <>
-                  <input
-                    className={styles.input}
-                    value={editingName}
-                    onChange={(event) => setEditingName(event.target.value)}
-                    autoFocus
-                  />
-                  <div className={styles.itemActions}>
-                    <button
-                      type="button"
-                      className={styles.linkButton}
-                      onClick={() => handleUpdate(item.id)}
-                    >
-                      Guardar
-                    </button>
-                    <button
-                      type="button"
-                      className={styles.linkButton}
-                      onClick={cancelEditing}
-                    >
-                      Cancelar
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <span className={styles.itemName}>{item.name}</span>
-                  <div className={styles.itemActions}>
-                    <button
-                      type="button"
-                      className={styles.linkButton}
-                      onClick={() => startEditing(item)}
-                    >
-                      Editar
-                    </button>
-                    <button
-                      type="button"
-                      className={styles.linkButtonDanger}
-                      onClick={() => handleDelete(item.id)}
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
+      {error && (
+        <p className={ui.alert} role="alert">
+          <AlertIcon />
+          {error}
+        </p>
       )}
+
+      <section className={`${ui.card} ${styles.card}`}>
+        <header className={ui.cardHeader}>
+          <div>
+            <h2 className={ui.cardTitle}>Registros</h2>
+            {!query.isPending && (
+              <p className={ui.cardSubtitle}>
+                {items.length === 1 ? '1 registro' : `${items.length} registros`}
+              </p>
+            )}
+          </div>
+        </header>
+
+        <form className={styles.createForm} onSubmit={handleCreate}>
+          <input
+            className={ui.input}
+            placeholder="Escribe un nombre y pulsa Agregar"
+            aria-label={`Nombre de ${singularLabel}`}
+            value={newName}
+            onChange={(event) => setNewName(event.target.value)}
+            required
+          />
+          <Button type="submit" size="sm" disabled={createMutation.isPending}>
+            <PlusIcon size={16} />
+            {createMutation.isPending ? 'Agregando...' : 'Agregar'}
+          </Button>
+        </form>
+
+        {query.isPending ? null : items.length === 0 ? (
+          <div className={ui.empty}>
+            <span className={ui.emptyIcon}>{icon}</span>
+            <p className={ui.emptyTitle}>Todavía no hay registros</p>
+            <p className={ui.emptyText}>
+              Agrega el primero con el campo de arriba.
+            </p>
+          </div>
+        ) : (
+          <ul className={styles.list}>
+            {items.map((item) => (
+              <li key={item.id} className={styles.item}>
+                {editingId === item.id ? (
+                  <>
+                    <input
+                      className={`${ui.input} ${styles.editInput}`}
+                      aria-label={`Nuevo nombre para ${item.name}`}
+                      value={editingName}
+                      onChange={(event) => setEditingName(event.target.value)}
+                      onKeyDown={(event) => handleEditKeyDown(event, item)}
+                      autoFocus
+                    />
+                    <div className={styles.itemActions}>
+                      <button
+                        type="button"
+                        className={`${ui.iconButton} ${styles.confirm}`}
+                        aria-label="Guardar"
+                        title="Guardar (Enter)"
+                        onClick={() => handleUpdate(item)}
+                      >
+                        <CheckIcon />
+                      </button>
+                      <button
+                        type="button"
+                        className={ui.iconButton}
+                        aria-label="Cancelar"
+                        title="Cancelar (Esc)"
+                        onClick={cancelEditing}
+                      >
+                        <XIcon />
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <span className={styles.itemName}>
+                      <span className={styles.dot} aria-hidden="true" />
+                      {item.name}
+                    </span>
+                    <div className={styles.itemActions}>
+                      <button
+                        type="button"
+                        className={ui.iconButton}
+                        aria-label={`Editar ${item.name}`}
+                        title="Editar"
+                        onClick={() => startEditing(item)}
+                      >
+                        <PencilIcon />
+                      </button>
+                      <button
+                        type="button"
+                        className={`${ui.iconButton} ${ui.iconButtonDanger}`}
+                        aria-label={`Eliminar ${item.name}`}
+                        title="Eliminar"
+                        onClick={() => handleDelete(item)}
+                      >
+                        <TrashIcon />
+                      </button>
+                    </div>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
     </div>
   );
 }

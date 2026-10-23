@@ -6,7 +6,7 @@ import {
   updateMaterial,
 } from '@private/dashboard/api/materialsApi';
 import { useNameResource } from '@private/dashboard/api/nameResourceQueries';
-import { materialKeys } from '@shared/api/queryKeys';
+import { accessoryKeys, materialKeys } from '@shared/api/queryKeys';
 
 export function materialsQueryOptions() {
   return queryOptions({
@@ -22,8 +22,8 @@ export function useMaterials() {
 
 export function useMaterialsManager() {
   return useNameResource({
-    queryKey: materialKeys.all,
-    fetchAll: getMaterials,
+    queryOptions: materialsQueryOptions(),
+    dependentKeys: [accessoryKeys.all],
     create: createMaterial,
     update: updateMaterial,
     remove: deleteMaterial,

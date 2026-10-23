@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { QueryKey, UseQueryOptions } from '@tanstack/react-query';
 
 export interface NameResource {
   id: number;
@@ -9,24 +10,27 @@ interface NamePayload {
   name: string;
 }
 
-interface NameResourceConfig {
-  queryKey: readonly unknown[];
-  fetchAll: () => Promise<NameResource[]>;
+interface NameResourceConfig<TKey extends readonly unknown[]> {
+  queryOptions: UseQueryOptions<NameResource[], Error, NameResource[], TKey> & {
+    queryKey: TKey;
+  };
+  dependentKeys?: QueryKey[];
   create: (payload: NamePayload) => Promise<unknown>;
   update: (id: number, payload: NamePayload) => Promise<unknown>;
   remove: (id: number) => Promise<unknown>;
 }
 
-export function useNameResource({
-  queryKey,
-  fetchAll,
+export function useNameResource<TKey extends readonly unknown[]>({
+  queryOptions,
+  dependentKeys = [],
   create,
   update,
   remove,
-}: NameResourceConfig) {
+}: NameResourceConfig<TKey>) {
   const queryClient = useQueryClient();
 
-  const query = useQuery({ queryKey, queryFn: fetchAll });
+  const { queryKey } = queryOptions;
+  const query = useQuery(queryOptions);
 
   async function applyOptimistic(
     change: (items: NameResource[]) => NameResource[],
@@ -41,11 +45,19 @@ export function useNameResource({
 
   function rollback(context: { previous?: NameResource[] } | undefined) {
     if (context?.previous) {
-      queryClient.setQueryData(queryKey, context.previous);
+      queryClient.setQueryData<NameResource[]>(queryKey, context.previous);
     }
   }
 
   const invalidate = () => queryClient.invalidateQueries({ queryKey });
+
+  const invalidateWithDependents = () =>
+    Promise.all([
+      invalidate(),
+      ...dependentKeys.map((key) =>
+        queryClient.invalidateQueries({ queryKey: key }),
+      ),
+    ]);
 
   const createMutation = useMutation({
     mutationFn: create,
@@ -59,7 +71,7 @@ export function useNameResource({
         items.map((item) => (item.id === id ? { ...item, name } : item)),
       ),
     onError: (_error, _variables, context) => rollback(context),
-    onSettled: invalidate,
+    onSettled: invalidateWithDependents,
   });
 
   const removeMutation = useMutation({
@@ -67,7 +79,7 @@ export function useNameResource({
     onMutate: (id: number) =>
       applyOptimistic((items) => items.filter((item) => item.id !== id)),
     onError: (_error, _id, context) => rollback(context),
-    onSettled: invalidate,
+    onSettled: invalidateWithDependents,
   });
 
   return { query, createMutation, updateMutation, removeMutation };
