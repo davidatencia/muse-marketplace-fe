@@ -24,6 +24,10 @@
   border-radius: 20px;
 }
 
+.frame {
+  position: relative;
+}
+
 .imageWrap {
   overflow: hidden;
   border-radius: 20px;
@@ -31,7 +35,66 @@
   background: color-mix(in srgb, var(--accent) 10%, white);
 }
 
-.imageWrap > * {
+.zoomTrigger {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  font: inherit;
+  cursor: zoom-in;
+}
+
+.zoomTrigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.zoomHint {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--color-dark-purple);
+  box-shadow: 0 2px 8px rgba(58, 28, 54, 0.15);
+  opacity: 0;
+  transform: scale(0.85);
+  transition:
+    opacity 0.25s var(--ease),
+    transform 0.25s var(--ease);
+}
+
+.zoomHint svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.media[data-featured='true'] .zoomHint {
+  top: 44px;
+}
+
+.card:hover .zoomHint,
+.zoomTrigger:focus-visible .zoomHint {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (hover: none) {
+  .zoomHint {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.imageWrap > :not(.zoomHint) {
   border-radius: 0;
   object-fit: contain;
   mix-blend-mode: multiply;
@@ -121,7 +184,7 @@
   background: #6b6375;
 }
 
-.card[data-sold-out='true'] .imageWrap > * {
+.card[data-sold-out='true'] .imageWrap > :not(.zoomHint) {
   filter: grayscale(1);
   opacity: 0.7;
 }
@@ -318,20 +381,20 @@
     box-shadow: 0 20px 40px rgba(58, 28, 54, 0.16);
   }
 
-  .card:hover .imageWrap > * {
+  .card:hover .imageWrap > :not(.zoomHint) {
     transform: scale(1.05);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .card,
-  .imageWrap > *,
+  .imageWrap > :not(.zoomHint),
   .details {
     transition: none;
   }
 
   .card:hover,
-  .card:hover .imageWrap > * {
+  .card:hover .imageWrap > :not(.zoomHint) {
     transform: none;
   }
 }
@@ -368,6 +431,17 @@
     top: 6px;
     right: 6px;
     padding: 4px 6px;
+  }
+
+  .zoomHint {
+    top: 6px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .media[data-featured='true'] .zoomHint {
+    top: 38px;
   }
 
   .featuredLabel {

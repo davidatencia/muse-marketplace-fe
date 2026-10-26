@@ -3,6 +3,7 @@ import type { MouseEvent } from 'react';
 import { Link } from 'react-router';
 import ImagePlaceholder from '@shared/components/ui/ImagePlaceholder/ImagePlaceholder';
 import { env } from '@shared/config/env';
+import { useBodyScrollLock } from '@shared/hooks/useBodyScrollLock';
 import { formatCurrency } from '@shared/utils/formatCurrency';
 import { useCart } from '@public/storefront/context/CartProvider/useCart';
 import {
@@ -32,15 +33,12 @@ function CartDrawer() {
 
     if (isOpen && !dialog.open) {
       dialog.showModal();
-      document.body.style.overflow = 'hidden';
     } else if (!isOpen && dialog.open) {
       dialog.close();
     }
-
-    return () => {
-      document.body.style.overflow = '';
-    };
   }, [isOpen]);
+
+  useBodyScrollLock(isOpen);
 
   function handleBackdropClick(event: MouseEvent<HTMLDialogElement>) {
     if (event.target === event.currentTarget) closeCart();
