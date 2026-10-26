@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import type { CSSProperties } from 'react';
 import ImagePlaceholder from '@shared/components/ui/ImagePlaceholder/ImagePlaceholder';
+import ImageLightbox from '@public/storefront/components/catalog/ImageLightbox/ImageLightbox';
 import { useCart } from '@public/storefront/context/CartProvider/useCart';
 import { formatCurrency } from '@shared/utils/formatCurrency';
 import type { Accessory } from '@shared/types/accessory';
@@ -29,6 +31,8 @@ interface ProductCardProps {
 function ProductCard({ product }: ProductCardProps) {
   const { addItem, getQuantity, openCart } = useCart();
   const quantityInCart = getQuantity(product.id);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const hasImage = Boolean(product.img);
   const isSoldOut = product.stock <= 0;
   const isLowStock = !isSoldOut && product.stock <= LOW_STOCK_THRESHOLD;
   const style = { '--accent': accentFor(product.category) } as CSSProperties;
@@ -40,33 +44,52 @@ function ProductCard({ product }: ProductCardProps) {
       data-sold-out={isSoldOut}
       tabIndex={0}
     >
-      <div className={styles.media}>
-        <span className={styles.categoryTab}>{product.category}</span>
+      <div className={styles.media} data-featured={product.highlighted}>
+        <div className={styles.frame}>
+          <span className={styles.categoryTab}>{product.category}</span>
 
-        {product.highlighted && (
-          <span className={styles.featured}>
-            <span aria-hidden="true">★</span>{' '}
-            <span className={styles.featuredLabel}>Destacado</span>
-          </span>
-        )}
-
-        <div className={styles.imageWrap}>
-          <ImagePlaceholder label={product.name} src={product.img} />
-        </div>
-
-        {isSoldOut ? (
-          <span className={`${styles.stockBadge} ${styles.soldOut}`}>
-            Agotado
-          </span>
-        ) : (
-          isLowStock && (
-            <span className={styles.stockBadge}>
-              {product.stock === 1
-                ? '¡Última unidad!'
-                : `¡Últimas ${product.stock} unidades!`}
+          {product.highlighted && (
+            <span className={styles.featured}>
+              <span aria-hidden="true">★</span>{' '}
+              <span className={styles.featuredLabel}>Destacado</span>
             </span>
-          )
-        )}
+          )}
+
+          {hasImage ? (
+            <button
+              type="button"
+              className={`${styles.imageWrap} ${styles.zoomTrigger}`}
+              aria-label={`Ver ${product.name} de cerca`}
+              onClick={() => setIsLightboxOpen(true)}
+            >
+              <ImagePlaceholder label={product.name} src={product.img} />
+              <span className={styles.zoomHint} aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="16" height="16">
+                  <circle cx="11" cy="11" r="6.5" />
+                  <path d="m20 20-4-4M11 8v6M8 11h6" />
+                </svg>
+              </span>
+            </button>
+          ) : (
+            <div className={styles.imageWrap}>
+              <ImagePlaceholder label={product.name} src={product.img} />
+            </div>
+          )}
+
+          {isSoldOut ? (
+            <span className={`${styles.stockBadge} ${styles.soldOut}`}>
+              Agotado
+            </span>
+          ) : (
+            isLowStock && (
+              <span className={styles.stockBadge}>
+                {product.stock === 1
+                  ? '¡Última unidad!'
+                  : `¡Últimas ${product.stock} unidades!`}
+              </span>
+            )
+          )}
+        </div>
 
         {/* Revealed over the image on hover/focus; shown inline on touch. */}
         <div className={styles.details}>
@@ -144,6 +167,15 @@ function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
       </div>
+      {isLightboxOpen && (
+        <ImageLightbox
+          src={product.img}
+          alt={product.name}
+          title={product.name}
+          subtitle={`${product.category} · ${formatCurrency(product.price)}`}
+          onClose={() => setIsLightboxOpen(false)}
+        />
+      )}
     </article>
   );
 }
