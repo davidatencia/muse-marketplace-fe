@@ -1,7 +1,6 @@
 import { httpClient } from '@shared/api/httpClient';
 import type { Accessory } from '@shared/types/accessory';
 
-// The API returns MySQL-style values: tinyint booleans and DECIMAL as strings.
 type AccessoryRow = Omit<
   Accessory,
   'handmade' | 'highlighted' | 'price' | 'rating'

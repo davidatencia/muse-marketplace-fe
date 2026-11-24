@@ -3,7 +3,6 @@ import Eyebrow from '@shared/components/ui/Eyebrow/Eyebrow';
 import ImagePlaceholder from '@shared/components/ui/ImagePlaceholder/ImagePlaceholder';
 import styles from './Story.module.css';
 
-// Cloudinary resizes and picks the best format; the original is ~3000x4000.
 const PORTRAIT_URL =
   'https://res.cloudinary.com/iyrl9jhg/image/upload/f_auto,q_auto,c_limit,w_900/v1786636136/cami-retrato.jpg';
 

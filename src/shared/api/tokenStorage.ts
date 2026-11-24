@@ -3,8 +3,8 @@ import Cookies from 'js-cookie';
 const ACCESS_TOKEN_KEY = 'muse_access_token';
 const REFRESH_TOKEN_KEY = 'muse_refresh_token';
 
-const ACCESS_TOKEN_TTL_MS = 2 * 60 * 60 * 1000; // matches backend access token expiry
-const REFRESH_TOKEN_TTL_DAYS = 7; // matches backend refresh token expiry
+const ACCESS_TOKEN_TTL_MS = 2 * 60 * 60 * 1000;
+const REFRESH_TOKEN_TTL_DAYS = 7;
 
 const baseOptions: Cookies.CookieAttributes = {
   sameSite: 'lax',
