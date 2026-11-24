@@ -3,26 +3,26 @@ import type { ServiceItem } from '@public/storefront/types/content'
 export const services: ServiceItem[] = [
   {
     title: 'Aretes',
-    description: 'Diseños únicos para cada estilo, desde piezas minimalistas hasta statement.',
+    description: 'Piezas en los mejores materiales para acompañar nuestros diseños hechos a mano.',
   },
   {
     title: 'Collares',
-    description: 'Combinaciones de materiales que resaltan tu look con un toque artesanal.',
+    description: 'Combinaciones de materiales que resaltan tu outfit con un toque statement.',
   },
   {
-    title: 'Pulseras',
+    title: 'Brazaletes',
     description: 'Piezas delicadas o llamativas, pensadas para usar solas o combinadas.',
   },
   {
+    title: 'Charms',
+    description: 'Elementos llenos de color y personalidad para darle el toque a lo que quieras.',
+  },
+  {
+    title: 'Personalizados',
+    description: 'Habla con nosotros y cuéntanos tu idea, podemos materializar lo que desees.',
+  },
+  {
     title: 'Anillos',
-    description: 'Detalles hechos a mano que se adaptan a tu estilo diario.',
-  },
-  {
-    title: 'Sets personalizados',
-    description: 'Conjuntos a medida para regalos u ocasiones especiales.',
-  },
-  {
-    title: 'Accesorios para cabello',
-    description: 'Broches y diademas artesanales que completan cualquier look.',
+    description: 'Próximamente…',
   },
 ]

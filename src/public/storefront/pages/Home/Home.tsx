@@ -17,7 +17,7 @@ function Home() {
       <Hero
         eyebrow="Hecho a mano con amor"
         title="Accesorios que cuentan tu historia"
-        description="Piezas únicas diseñadas y elaboradas a mano, pensadas para acompañar cada momento especial."
+        description="Piezas únicas, hechas a mano, diseñadas para inspirarte a atreverte, expresarte y llevar con seguridad lo que te hace ser tú."
         ctaLabel="Ver colección"
         ctaHref="/productos"
       />
@@ -36,7 +36,7 @@ function Home() {
         eyebrow="Nuestra historia"
         heading="Detrás de cada pieza hay una historia"
         paragraphs={[
-          'Musé nació de la pasión por crear accesorios que reflejan la personalidad de quien los usa.',
+          'MUSÉ nació desde la pasión por crear y el deseo de impulsar a mujeres a atreverse a usar lo que refleja su personalidad.',
           'Cada pieza es diseñada y elaborada a mano, cuidando cada detalle desde la selección de materiales hasta el empaque final.',
         ]}
         ctaLabel="Conóceme más"
