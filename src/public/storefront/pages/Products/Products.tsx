@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router';
 import ProductCard from '@public/storefront/components/catalog/ProductCard/ProductCard';
 import SectionHeading from '@shared/components/ui/SectionHeading/SectionHeading';
@@ -15,6 +16,10 @@ function isSameCategory(a: string, b: string | null) {
 function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedCategory = searchParams.get(CATEGORY_PARAM);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, []);
 
   const {
     data: products = [],
