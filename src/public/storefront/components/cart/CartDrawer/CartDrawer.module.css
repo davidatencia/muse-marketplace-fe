@@ -253,15 +253,31 @@
   background: color-mix(in srgb, var(--color-thistle) 25%, white);
 }
 
-.total {
+.total,
+.discount,
+.estimatedTotal {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   font-size: 15px;
 }
 
-.total strong {
+.total strong,
+.estimatedTotal strong {
   font-size: 22px;
+}
+
+.discount {
+  color: var(--color-olive);
+}
+
+.discount strong {
+  font-size: 16px;
+}
+
+.estimatedTotal {
+  padding-top: 10px;
+  border-top: 1px solid var(--color-thistle);
 }
 
 .whatsapp {

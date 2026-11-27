@@ -5,6 +5,11 @@ import ImagePlaceholder from '@shared/components/ui/ImagePlaceholder/ImagePlaceh
 import { env } from '@shared/config/env';
 import { useBodyScrollLock } from '@shared/hooks/useBodyScrollLock';
 import { formatCurrency } from '@shared/utils/formatCurrency';
+import { usePromotions } from '@shared/api/promotionsQueries';
+import {
+  calculateDiscountedPrice,
+  getFirstActivePromotion,
+} from '@shared/utils/promotions';
 import { useCart } from '@public/storefront/context/CartProvider/useCart';
 import {
   buildCartMessage,
@@ -23,6 +28,7 @@ function CartDrawer() {
     removeItem,
     clearCart,
   } = useCart();
+  const { data: promotions = [] } = usePromotions(isOpen);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -42,8 +48,14 @@ function CartDrawer() {
     if (event.target === event.currentTarget) closeCart();
   }
 
+  const activePromotion = getFirstActivePromotion(promotions);
+  const estimatedTotal = activePromotion
+    ? calculateDiscountedPrice(totalPrice, activePromotion.discount)
+    : totalPrice;
+  const discountAmount = totalPrice - estimatedTotal;
+
   const whatsappUrl = env.whatsappNumber
-    ? buildWhatsAppUrl(env.whatsappNumber, buildCartMessage(items, totalPrice))
+    ? buildWhatsAppUrl(env.whatsappNumber, buildCartMessage(items, estimatedTotal))
     : null;
 
   return (
@@ -142,9 +154,22 @@ function CartDrawer() {
 
             <footer className={styles.footer}>
               <div className={styles.total}>
-                <span>Total estimado</span>
+                <span>Subtotal</span>
                 <strong>{formatCurrency(totalPrice)}</strong>
               </div>
+
+              {activePromotion && (
+                <>
+                  <div className={styles.discount}>
+                    <span>Descuento ({activePromotion.discount}%)</span>
+                    <strong>−{formatCurrency(discountAmount)}</strong>
+                  </div>
+                  <div className={styles.estimatedTotal}>
+                    <span>Total estimado</span>
+                    <strong>{formatCurrency(estimatedTotal)}</strong>
+                  </div>
+                </>
+              )}
 
               {whatsappUrl ? (
                 <a

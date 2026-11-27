@@ -1,0 +1,52 @@
+.bar {
+  position: sticky;
+  top: var(--header-height);
+  z-index: 9;
+  background: var(--color-surface-deep);
+  color: var(--color-bg);
+  padding: 8px var(--space-md);
+  text-align: center;
+}
+
+.message {
+  align-items: center;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: var(--max-width);
+  overflow: hidden;
+}
+
+.discount {
+  background: var(--color-accent);
+  border-radius: 999px;
+  color: var(--color-bg);
+  flex: 0 0 auto;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+}
+
+.description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .bar {
+    padding: 6px var(--space-sm);
+  }
+
+  .message {
+    gap: 6px;
+    font-size: 0.8125rem;
+  }
+
+  .discount {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+  }
+}
