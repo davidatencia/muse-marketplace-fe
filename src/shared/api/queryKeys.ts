@@ -11,3 +11,8 @@ export const categoryKeys = {
 export const materialKeys = {
   all: ['materials'] as const,
 };
+
+export const promotionKeys = {
+  all: ['promotions'] as const,
+  list: () => [...promotionKeys.all, 'list'] as const,
+};
