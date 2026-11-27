@@ -25,8 +25,6 @@ function CartDrawer() {
   } = useCart();
   const dialogRef = useRef<HTMLDialogElement>(null);
 
-  // Keep the native <dialog> in sync with context state. showModal() gives us
-  // focus trapping, Esc to close and inert background for free.
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;

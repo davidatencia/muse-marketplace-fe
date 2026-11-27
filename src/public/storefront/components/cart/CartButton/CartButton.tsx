@@ -22,7 +22,6 @@ function CartButton() {
         />
       </svg>
       {totalItems > 0 && (
-        // Keyed by count so the bump animation replays on every change.
         <span key={totalItems} className={styles.badge}>
           {totalItems}
         </span>

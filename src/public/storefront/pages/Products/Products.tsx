@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router';
 import ProductCard from '@public/storefront/components/catalog/ProductCard/ProductCard';
 import SectionHeading from '@shared/components/ui/SectionHeading/SectionHeading';
@@ -6,7 +7,6 @@ import { useRevealOnScroll } from '@shared/hooks/useRevealOnScroll';
 import { getErrorMessage } from '@shared/utils/getErrorMessage';
 import styles from './Products.module.css';
 
-// Must match the links built in the home "Categorías destacadas" section.
 const CATEGORY_PARAM = 'categoria';
 
 function isSameCategory(a: string, b: string | null) {
@@ -17,14 +17,23 @@ function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedCategory = searchParams.get(CATEGORY_PARAM);
 
-  const { data: products = [], isPending: isLoading, error: loadError } =
-    useAccessories();
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, []);
+
+  const {
+    data: products = [],
+    isPending: isLoading,
+    error: loadError,
+  } = useAccessories();
   const gridRef = useRevealOnScroll<HTMLUListElement>();
   const error = loadError
     ? getErrorMessage(loadError, 'No se pudo cargar el catálogo')
     : null;
 
-  const categories = Array.from(new Set(products.map((product) => product.category)));
+  const categories = Array.from(
+    new Set(products.map((product) => product.category)),
+  );
 
   const visibleProducts = selectedCategory
     ? products.filter((product) =>
@@ -78,7 +87,9 @@ function Products() {
               ))}
             </ul>
             {visibleProducts.length === 0 ? (
-              <p className={styles.status}>Todavía no hay productos en esta categoría.</p>
+              <p className={styles.status}>
+                Todavía no hay productos en esta categoría.
+              </p>
             ) : (
               <ul ref={gridRef} className={styles.grid}>
                 {visibleProducts.map((product) => (
